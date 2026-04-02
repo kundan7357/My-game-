@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kundan Kushwaha | Pro Site</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --accent: #22c55e; /* Cyber Green */
+            --border: #334155;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1 { margin: 10px 0; font-size: 1.8rem; letter-spacing: -1px; }
+        .tagline { opacity: 0.6; margin-bottom: 25px; font-size: 0.9rem; }
+
+        /* Game Area */
+        #game-screen {
+            background: #0f172a;
+            border-radius: 12px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+            border: 2px dashed var(--border);
+            user-select: none;
+            transition: 0.2s;
+        }
+
+        .btn-aesthetic {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-aesthetic:hover { transform: scale(1.05); filter: brightness(1.1); }
+        
+        .result { font-weight: bold; color: var(--accent); margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Kundan Kushwaha</h1>
+        <p class="tagline">Developer & Gamer</p>
+
+        <div id="game-screen" onclick="handleClick()">
+            <span id="game-text">TAP TO START GAME</span>
+        </div>
+
+        <p id="stats">Can you beat a 250ms reaction?</p>
+        
+        <button class="btn-aesthetic" onclick="resetGame()">Reset Highscore</button>
+        
+        <div style="margin-top: 25px; font-size: 0.7rem; opacity: 0.4;">
+            © 2026 Kundan Kushwaha • Powered by Vercel
+        </div>
+    </div>
+
+    <script>
+        let startTime, timeoutId;
+        let gameState = "IDLE"; // IDLE, WAITING, READY
+        const screen = document.getElementById('game-screen');
+        const text = document.getElementById('game-text');
+
+        function handleClick() {
+            if (gameState === "IDLE") {
+                startWaiting();
+            } else if (gameState === "WAITING") {
+                clearTimeout(timeoutId);
+                text.innerText = "TOO EARLY! TRY AGAIN.";
+                screen.style.background = "#ef4444";
+                gameState = "IDLE";
+            } else if (gameState === "READY") {
+                let reactionTime = Date.now() - startTime;
+                text.innerText = reactionTime + " ms!";
+                screen.style.background = "#22c55e";
+                gameState = "IDLE";
+            }
+        }
+
+        function startWaiting() {
+            gameState = "WAITING";
+            text.innerText = "WAIT FOR GREEN...";
+            screen.style.background = "#334155";
+            
+            let delay = Math.floor(Math.random() * 3000) + 2000;
+            timeoutId = setTimeout(() => {
+                gameState = "READY";
+                text.innerText = "CLICK NOW!";
+                screen.style.background = "#22c55e";
+                startTime = Date.now();
+            }, delay);
+        }
+
+        function resetGame() {
+            gameState = "IDLE";
+            text.innerText = "TAP TO START GAME";
+            screen.style.background = "#0f172a";
+        }
+    </script>
+</body>
+</html>
